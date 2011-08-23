@@ -195,6 +195,12 @@ def scan_and_parse_dir(srcdir, destdir, parser):
 # ---------------------------------
 
 def scan_for_test_files(dirname, parser):
+  try:
+    import hashlib
+    sha1 = hashlib.sha1
+  except ImportError:
+    import sha
+    sha1 = sha.new
   for root, dirs, files in os.walk(dirname):
     for in_filename in files:
       if in_filename.endswith('in.js'):
@@ -210,7 +216,7 @@ def scan_for_test_files(dirname, parser):
         # Hopefully this doesn't come back to bite me, but I'm using a hash of the
         # output to compare it with the known TEST PASS state.  The odds of a false
         # positive are pretty slim...
-        if (hashlib.sha224(out_target_output).hexdigest() == hashlib.sha224(in_parsed).hexdigest()):
+        if (sha1(out_target_output).hexdigest() == sha1(in_parsed).hexdigest()):
           print "PASS [%s]" % (in_file_path)
         else:
           print "FAIL [%s]" % (in_file_path)
