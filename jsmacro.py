@@ -2,7 +2,6 @@
 
 from datetime import datetime
 import getopt
-import hashlib
 import os
 import re
 import sys
